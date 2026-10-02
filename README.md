@@ -17,24 +17,24 @@ Equal averages can hide harm. A randomized trial identifies only
 $\text{ATE} = P(\text{benefit}) - P(\text{harm})$. Combining it with
 observational data bounds each term for a given group:
 
-|                                        | Women | Men  |
-|----------------------------------------|-------|------|
-| CATE, from the trial                   | 0.28  | 0.28 |
-| Recovery among those who chose the drug| 0.27  | 0.70 |
-| P(benefit)                             | 0.28  | 0.49 |
-| P(harm)                                | 0.00  | 0.21 |
+|                                        | Female | Male |
+|----------------------------------------|--------|------|
+| CATE, from the trial                   | 0.28   | 0.28 |
+| Recovery among those who chose the drug| 0.27   | 0.70 |
+| P(benefit)                             | 0.28   | 0.49 |
+| P(harm)                                | 0.00   | 0.21 |
 
-Women and men have the same CATE, but about 21% of men would survive without
-the drug and die with it. For women, the drug harms no one.
+Female and male have the same CATE, but about 21% of male would survive without
+the drug and die with it. For female, the drug harms no one.
 
 ## Notebooks
 
 - **`ITE_Numerical_Example.ipynb`** reproduces the paper's example. It takes
   the published trial and survey tables and computes the Tian–Pearl bounds on
-  P(benefit) and P(harm) for women and men.
+  P(benefit) and P(harm) for female and male.
 - **`ITE_Data_Generation_Example.ipynb`** simulates a trial and an
   observational study, then estimates benefit and harm as intervals from those
-  samples. It ends by comparing three policies for 2,000 simulated men: the
+  samples. It ends by comparing three policies for 2,000 simulated male: the
   drug is not approved, it is prescribed to everyone, or it is withheld from
   those it would harm.
 
