@@ -201,6 +201,68 @@ def plot_prescribed_to_all(types: ResponseTypes, n: int, tol: float) -> None:
     )
 
 
+def plot_prescribed_to_all_rct_only(p_yt: float, p_yc: float, n: int) -> None:
+    """Scenario 2 seen with the RCT alone - the drug is approved and
+    prescribed to every male who attends, but no observational study has been
+    run, so nothing is known about counterfactuals: only the two experimental
+    arms, P(y_t) and P(y_c), and the treatment effect they give. The deaths
+    cannot be split into those the drug causes and those it cannot prevent,
+    so they stay a single group."""
+    p_death_all_treated = 1 - p_yt
+    cate = p_yt - p_yc
+
+    nodes = {
+        "root": (
+            0.01, 0.50,
+            f"Males attending the physician\nn = {n:,}",
+            NEUTRAL_FACE, NEUTRAL_EDGE,
+        ),
+        "prescribed": (
+            0.29, 0.50,
+            "The drug is approved\nand prescribed to all of them (t)",
+            CHOICE_FACE, CHOICE_EDGE,
+        ),
+        "survived": (
+            0.62, 0.74,
+            "Survived (y)\n"
+            f"P(y_t) = {p_yt:.3f}   n ≈ {round(p_yt * n):,}\n"
+            "   who among them the drug saved: unknown",
+            SURVIVAL_FACE, SURVIVAL_EDGE,
+        ),
+        "died": (
+            0.62, 0.26,
+            "Died (y')\n"
+            f"P(y'_t) = {p_death_all_treated:.3f}   "
+            f"n ≈ {round(p_death_all_treated * n):,}\n"
+            "   who among them the drug killed: unknown",
+            DEATH_FACE, DEATH_EDGE,
+        ),
+    }
+
+    edges = [
+        ("root", "prescribed", ""),
+        ("prescribed", "survived", f"{p_yt:.1%}"),
+        ("prescribed", "died", f"{p_death_all_treated:.1%}"),
+    ]
+
+    draw_flow(
+        nodes,
+        edges,
+        "Scenario 2 with the RCT only - the drug is prescribed to everyone: "
+        "only the net effect is known",
+        note=(
+            f"The RCT gives the treatment effect: survival is {p_yt:.3f} against "
+            f"{p_yc:.3f} untreated, so CATE = {cate:+.3f}, about "
+            f"{round(cate * n):,} more of these males survive than in scenario 1.\n"
+            "Without the observational study nothing is known about "
+            "counterfactuals, so this net gain cannot be split into the males the "
+            "drug saves\nand the males it kills - the deaths look like a single "
+            "group."
+        ),
+        figsize=(11.5, 5),
+    )
+
+
 def plot_biomarker(types: ResponseTypes, n: int, tol: float) -> None:
     """Scenario 3 - the biomarker tells the physician which males the drug
     would harm: those are kept off it, every other male is prescribed it.
