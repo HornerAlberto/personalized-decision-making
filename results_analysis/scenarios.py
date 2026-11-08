@@ -75,11 +75,11 @@ def print_response_types(types: ResponseTypes, tol: float, label: str = "Male") 
         )
 
 
-def plot_not_approved(types: ResponseTypes, n: int, tol: float) -> None:
+def plot_not_approved(p_yc: float, n: int) -> None:
     """Scenario 1 - the drug is not approved: every sampled male stays
     untreated (c), so the experimental control arm estimates what happens to
-    all of them."""
-    p_yc = types.p_yc
+    all of them. At this point nothing is known about counterfactuals, so who
+    among them the drug would have saved or harmed is unknown."""
     p_death_no_drug = 1 - p_yc
 
     nodes = {
@@ -97,8 +97,7 @@ def plot_not_approved(types: ResponseTypes, n: int, tol: float) -> None:
             0.58, 0.72,
             "Survived (y)\n"
             f"P(y_c) = {p_yc:.3f}   n ≈ {round(p_yc * n):,}\n"
-            f"   survive either way: {fmt_interval(types.always, tol)}\n"
-            f"   would have been harmed: {fmt_interval(types.harm, tol)}",
+            "   who among them the drug would have harmed: unknown",
             SURVIVAL_FACE, SURVIVAL_EDGE,
         ),
         "died": (
@@ -106,8 +105,7 @@ def plot_not_approved(types: ResponseTypes, n: int, tol: float) -> None:
             "Died (y')\n"
             f"P(y'_c) = {p_death_no_drug:.3f}   "
             f"n ≈ {round(p_death_no_drug * n):,}\n"
-            f"   would have benefited: {fmt_interval(types.benefit, tol)}\n"
-            f"   die either way: {fmt_interval(types.never, tol)}",
+            "   who among them the drug would have saved: unknown",
             DEATH_FACE, DEATH_EDGE,
         ),
     }
@@ -124,9 +122,10 @@ def plot_not_approved(types: ResponseTypes, n: int, tol: float) -> None:
         "Scenario 1 - the drug is not approved: no benefit, no harm",
         figsize=(11.5, 5),
         note=(
-            "Nobody is harmed by the drug, but nobody is saved by it either: the "
-            f"{fmt_interval(types.benefit, tol)} of these males it would have rescued\n"
-            "die with everyone else who cannot survive untreated."
+            "Nobody is harmed by the drug, but nobody is saved by it either. "
+            "Nothing is known about counterfactuals at this point, so the deaths\n"
+            "cannot be told apart from the males the drug would have rescued, "
+            "and the survivors from those it would have harmed."
         ),
     )
 
